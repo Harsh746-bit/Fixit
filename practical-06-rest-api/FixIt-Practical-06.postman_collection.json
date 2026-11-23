@@ -1,0 +1,394 @@
+{
+  "info": {
+    "_postman_id": "c6e8e280-4960-498b-801d-f8practical06",
+    "name": "FixIt - Practical 06 RESTful API (Database CRUD & Cloud Deployment)",
+    "description": "Complete Postman test suite for Practical 06. Covers CRUD operations, input validation, query filtering, dynamic statistics, and cloud hosting URL verification.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5001",
+      "type": "string",
+      "description": "Base URL of API. Change to deployed URL (e.g. https://fixit-api.onrender.com) for cloud testing."
+    },
+    {
+      "key": "createdRecordId",
+      "value": "66f501010101010101010001",
+      "type": "string",
+      "description": "Dynamically set by POST request test script."
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Server Health Check & API Directory",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response returns valid API metadata\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('project');",
+              "    pm.expect(jsonData).to.have.property('endpoints');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": ["{{baseUrl}}"],
+          "path": [""]
+        }
+      }
+    },
+    {
+      "name": "02. Read All Records (GET)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Returns list of records with count\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData).to.have.property('count');",
+              "    pm.expect(Array.isArray(jsonData.data)).to.be.true;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"]
+        }
+      }
+    },
+    {
+      "name": "03. Filter Records by Category & Status",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Filtered results match query parameter\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    jsonData.data.forEach(item => {",
+              "        pm.expect(item.category).to.eql(\"Electrical\");",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records?category=Electrical&status=Pending",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"],
+          "query": [
+            { "key": "category", "value": "Electrical" },
+            { "key": "status", "value": "Pending" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "04. Create New Record (POST - Valid)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201 Created\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Record created with ID and timestamps\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data).to.have.property('_id');",
+              "    pm.collectionVariables.set('createdRecordId', jsonData.data._id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Smart Projector HDMI Port Damage\",\n  \"category\": \"Electrical\",\n  \"location\": \"Auditorium Hall - Stage Console\",\n  \"priority\": \"High\",\n  \"status\": \"Pending\",\n  \"description\": \"HDMI connection pins are bent and causing screen flickering during seminar presentations.\",\n  \"reporterName\": \"Pooja Iyer\",\n  \"reporterEmail\": \"pooja.iyer@campus.edu\",\n  \"reporterPhone\": \"9823456789\",\n  \"estimatedCost\": 1200\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"]
+        }
+      }
+    },
+    {
+      "name": "05. Create Record - Validation Failure Test (POST 400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Returns structured validation errors list\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.false;",
+              "    pm.expect(jsonData.errors).to.be.an('array');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"\",\n  \"category\": \"InvalidCategory\",\n  \"reporterEmail\": \"not-an-email\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records"]
+        }
+      }
+    },
+    {
+      "name": "06. Read Single Record by ID (GET)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Retrieved record matches created record\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data.title).to.eql(\"Smart Projector HDMI Port Damage\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdRecordId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdRecordId}}"]
+        }
+      }
+    },
+    {
+      "name": "07. Full Update of Record (PUT)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Record updated with new status and priority\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data.status).to.eql(\"In Progress\");",
+              "    pm.expect(jsonData.data.priority).to.eql(\"Critical\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Smart Projector HDMI Port Damage - Parts Ordered\",\n  \"category\": \"Electrical\",\n  \"location\": \"Auditorium Hall - Stage Console\",\n  \"priority\": \"Critical\",\n  \"status\": \"In Progress\",\n  \"description\": \"Replacement HDMI PCB card dispatched by vendor; technician scheduled for 2 PM.\",\n  \"reporterName\": \"Pooja Iyer\",\n  \"reporterEmail\": \"pooja.iyer@campus.edu\",\n  \"reporterPhone\": \"9823456789\",\n  \"estimatedCost\": 1500\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdRecordId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdRecordId}}"]
+        }
+      }
+    },
+    {
+      "name": "08. Partial Update of Record Status (PATCH)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Status updated to Resolved\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.status).to.eql(\"Resolved\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"Resolved\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdRecordId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdRecordId}}"]
+        }
+      }
+    },
+    {
+      "name": "09. Retrieve Summary Statistics (GET)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Aggregations include total, status counts, and category breakdown\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('total');",
+              "    pm.expect(jsonData.data).to.have.property('pending');",
+              "    pm.expect(jsonData.data).to.have.property('resolved');",
+              "    pm.expect(jsonData.data).to.have.property('categoryBreakdown');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/stats/summary",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "stats", "summary"]
+        }
+      }
+    },
+    {
+      "name": "10. Delete Record from Database (DELETE)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Deleted record confirmed\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData).to.have.property('deletedData');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdRecordId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdRecordId}}"]
+        }
+      }
+    },
+    {
+      "name": "11. Verify Record Deleted - Not Found (GET 404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/records/{{createdRecordId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "records", "{{createdRecordId}}"]
+        }
+      }
+    }
+  ]
+}

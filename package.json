@@ -1,0 +1,23 @@
+{
+  "name": "fixit-campus-suite",
+  "version": "1.0.0",
+  "description": "FixIt — Smart Campus Maintenance Management System (Integrated Full-Stack with RBAC)",
+  "main": "final-app/backend/server.js",
+  "scripts": {
+    "build": "cd final-app && npm run build",
+    "start": "cd final-app && npm start",
+    "test:rbac": "node final-app/backend/test-rbac.js"
+  },
+  "keywords": [
+    "campus-maintenance",
+    "react",
+    "express",
+    "nodejs",
+    "rbac"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "Web Technology Lab",
+  "license": "ISC"
+}

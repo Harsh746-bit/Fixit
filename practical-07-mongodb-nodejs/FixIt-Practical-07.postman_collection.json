@@ -1,0 +1,376 @@
+{
+  "info": {
+    "_postman_id": "b7744dca-490c-498b-801d-practical07fixit",
+    "name": "FixIt - Practical 07 MongoDB NoSQL Web App",
+    "description": "Postman test suite for Practical 07: Node.js + Express + MongoDB CRUD, Mongoose schema validation, status transitions, and database seeding.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5002",
+      "type": "string",
+      "description": "API Base URL (change to deployed cloud URL if needed)"
+    },
+    {
+      "key": "createdIssueId",
+      "value": "66f502010101010101010001",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01. Check MongoDB Database Status",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Database metadata contains database and collection name\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.dbInfo).to.have.property('database');",
+              "    pm.expect(jsonData.dbInfo).to.have.property('collection');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/db-status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "db-status"]
+        }
+      }
+    },
+    {
+      "name": "02. Read All Issues from MongoDB Collection",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Returns array of issues with count\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData).to.have.property('count');",
+              "    pm.expect(Array.isArray(jsonData.data)).to.be.true;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/issues",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues"]
+        }
+      }
+    },
+    {
+      "name": "03. Filter Issues by Category",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Filtered results are all Internet issues\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    jsonData.data.forEach(item => {",
+              "        pm.expect(item.category).to.eql(\"Internet\");",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/issues?category=Internet",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues"],
+          "query": [{ "key": "category", "value": "Internet" }]
+        }
+      }
+    },
+    {
+      "name": "04. Create New Issue Document (POST)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201 Created\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test(\"Document saved in MongoDB with generated _id and ticketId\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data).to.have.property('_id');",
+              "    pm.collectionVariables.set('createdIssueId', jsonData.data._id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Chemistry Lab Fume Hood Blower Stalled\",\n  \"category\": \"HVAC\",\n  \"location\": \"Chemistry Department - Lab 4B\",\n  \"priority\": \"Critical\",\n  \"status\": \"Pending\",\n  \"description\": \"Exhaust blower belt has slipped, vapors lingering inside the organic synthesis chamber.\",\n  \"reporterName\": \"Dr. Kavita Verma\",\n  \"reporterEmail\": \"kavita.v@campus.edu\",\n  \"reporterPhone\": \"9834567890\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/issues",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues"]
+        }
+      }
+    },
+    {
+      "name": "05. Create Issue - Validation Failure Test (POST 400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 400 Bad Request\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test(\"Validation errors array returned\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.false;",
+              "    pm.expect(jsonData.errors).to.be.an('array');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"No\",\n  \"category\": \"AlienCategory\",\n  \"description\": \"short\",\n  \"reporterEmail\": \"bad-email\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/issues",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues"]
+        }
+      }
+    },
+    {
+      "name": "06. Read Single Issue by ID (GET)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Retrieved document matches created document\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.data.title).to.eql(\"Chemistry Lab Fume Hood Blower Stalled\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/issues/{{createdIssueId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues", "{{createdIssueId}}"]
+        }
+      }
+    },
+    {
+      "name": "07. Full Update of Issue Document (PUT)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Document updated with In Progress status\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.status).to.eql(\"In Progress\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Chemistry Lab Fume Hood Blower - Drive Belt Replaced\",\n  \"category\": \"HVAC\",\n  \"location\": \"Chemistry Department - Lab 4B\",\n  \"priority\": \"Critical\",\n  \"status\": \"In Progress\",\n  \"description\": \"New V-belt fitted on motor drive; airflow sensor calibration ongoing.\",\n  \"reporterName\": \"Dr. Kavita Verma\",\n  \"reporterEmail\": \"kavita.v@campus.edu\",\n  \"reporterPhone\": \"9834567890\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/issues/{{createdIssueId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues", "{{createdIssueId}}"]
+        }
+      }
+    },
+    {
+      "name": "08. Update Issue Status Only (PATCH)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Status changed to Resolved\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data.status).to.eql(\"Resolved\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"Resolved\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/issues/{{createdIssueId}}/status",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues", "{{createdIssueId}}", "status"]
+        }
+      }
+    },
+    {
+      "name": "09. Retrieve Aggregated Summary Statistics",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Aggregations include total and status counts\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.data).to.have.property('total');",
+              "    pm.expect(jsonData.data).to.have.property('pending');",
+              "    pm.expect(jsonData.data).to.have.property('resolved');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/issues/stats/summary",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues", "stats", "summary"]
+        }
+      }
+    },
+    {
+      "name": "10. Delete Issue Document from MongoDB (DELETE)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200 OK\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Deleted document confirmed\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData).to.have.property('deletedData');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/issues/{{createdIssueId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues", "{{createdIssueId}}"]
+        }
+      }
+    },
+    {
+      "name": "11. Verify Document Deleted (GET 404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404 Not Found\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/issues/{{createdIssueId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "issues", "{{createdIssueId}}"]
+        }
+      }
+    }
+  ]
+}

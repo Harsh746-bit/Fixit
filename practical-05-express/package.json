@@ -1,0 +1,23 @@
+{
+  "name": "fixit-practical-05-express",
+  "version": "1.0.0",
+  "description": "FixIt Campus Maintenance System - Express.js REST API (Practical 05)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "keywords": [
+    "express",
+    "rest-api",
+    "routing",
+    "middleware",
+    "practical-05"
+  ],
+  "author": "Web Technology Lab",
+  "license": "ISC"
+}

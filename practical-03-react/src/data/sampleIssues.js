@@ -1,0 +1,77 @@
+/**
+ * Sample Campus Maintenance Issues for Practical 03 (ReactJS)
+ */
+export const initialIssues = [
+  {
+    id: "FIX-1001",
+    name: "Rahul Sharma",
+    email: "rahul.sharma@campus.edu",
+    category: "Electrical",
+    location: "Block A - Room 204",
+    priority: "High",
+    description: "Ceiling fan is making loud grinding noise and not rotating at full speed during lectures.",
+    status: "Pending",
+    date: "2026-09-28",
+    contact: "9876543210"
+  },
+  {
+    id: "FIX-1002",
+    name: "Ananya Patel",
+    email: "ananya.p@campus.edu",
+    category: "Internet",
+    location: "Computer Lab 3 - 2nd Floor",
+    priority: "High",
+    description: "Students facing frequent disconnects from Campus-Secure access point.",
+    status: "In Progress",
+    date: "2026-09-27",
+    contact: "9812345678"
+  },
+  {
+    id: "FIX-1003",
+    name: "Vikram Mehta",
+    email: "vikram.m@campus.edu",
+    category: "Plumbing",
+    location: "Hostel Block B - Ground Floor",
+    priority: "Critical",
+    description: "Continuous water leakage from pipe joint causing slippery corridor floor.",
+    status: "Resolved",
+    date: "2026-09-26",
+    contact: "9711223344"
+  },
+  {
+    id: "FIX-1004",
+    name: "Sneha Reddy",
+    email: "sneha.r@campus.edu",
+    category: "Furniture",
+    location: "Block C - Room 102",
+    priority: "Medium",
+    description: "Wooden armrest on student desk is fractured and has exposed sharp screw edges.",
+    status: "Resolved",
+    date: "2026-09-25",
+    contact: ""
+  },
+  {
+    id: "FIX-1005",
+    name: "Arjun Nair",
+    email: "arjun.nair@campus.edu",
+    category: "Equipment",
+    location: "Physics Lab - Station 4",
+    priority: "Medium",
+    description: "Cathode Ray Oscilloscope displays noisy waveform; requires potentiometer recalibration.",
+    status: "In Progress",
+    date: "2026-09-24",
+    contact: "9988776655"
+  },
+  {
+    id: "FIX-1006",
+    name: "Pooja Gupta",
+    email: "pooja.g@campus.edu",
+    category: "Cleaning",
+    location: "Main Building - 1st Floor Corridor",
+    priority: "Low",
+    description: "Recycling bin overflowing after faculty seminar. Requires prompt sanitation disposal.",
+    status: "Resolved",
+    date: "2026-09-23",
+    contact: ""
+  }
+];

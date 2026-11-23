@@ -1,0 +1,793 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FixIt — Campus Maintenance Management | Facilities Department</title>
+  <meta name="description" content="FixIt is the official maintenance request portal for campus facilities. Report electrical, plumbing, civil and IT issues for rapid, trackable resolution." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  TOPBAR — Emergency Info                                │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <div class="topbar">
+    <div class="container d-flex justify-content-between align-items-center">
+      <span>
+        <span class="dot me-2"></span>
+        <strong>Facilities Operations Centre</strong> — Mon–Sat 08:00–20:00 &nbsp;|&nbsp;
+        Emergency: <strong>+91 98765 00000</strong>
+      </span>
+      <span class="d-none d-md-inline">
+        Dept Portal · Academic Year 2025–26
+      </span>
+    </div>
+  </div>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  NAV                                                    │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg" id="mainNav">
+      <div class="container">
+        <a class="brand-block text-decoration-none" href="#hero">
+          <div class="brand-icon">
+            <i class="fas fa-wrench"></i>
+          </div>
+          <div>
+            <div class="brand-name">FixIt</div>
+            <div class="brand-dept">Facilities Management</div>
+          </div>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+          <ul class="navbar-nav mx-auto gap-1">
+            <li class="nav-item"><a class="nav-link active" href="#hero">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#categories">Services</a></li>
+            <li class="nav-item"><a class="nav-link" href="#how-it-works">Process</a></li>
+            <li class="nav-item"><a class="nav-link" href="#registry">Active Issues</a></li>
+            <li class="nav-item"><a class="nav-link" href="#report">Report</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-2">
+            <a href="#report" class="btn-primary-site">
+              <i class="fas fa-plus-circle"></i> Report an Issue
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  HERO                                                   │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <section id="hero" class="hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <!-- Copy -->
+        <div class="col-lg-5">
+          <div class="hero-eyebrow">
+            <span class="live-dot"></span>
+            Active Maintenance Portal
+          </div>
+          <h1>Campus Repairs.<br /><span>Fast, Tracked,</span><br />Resolved.</h1>
+          <p class="hero-lead">
+            Submit, track, and manage campus maintenance requests across all
+            departments, hostels, and facilities — all from one place.
+          </p>
+          <div class="hero-ctas">
+            <a href="#report" class="btn-primary-site">
+              <i class="fas fa-clipboard-list"></i> Submit a Request
+            </a>
+            <a href="#registry" class="btn-outline-site">
+              View Active Issues
+            </a>
+          </div>
+          <div class="hero-metrics">
+            <div>
+              <span class="metric-val">342</span>
+              <span class="metric-lbl">Issues Resolved</span>
+            </div>
+            <div>
+              <span class="metric-val">2.4h</span>
+              <span class="metric-lbl">Avg. Response</span>
+            </div>
+            <div>
+              <span class="metric-val">97%</span>
+              <span class="metric-lbl">Satisfaction Rate</span>
+            </div>
+          </div>
+        </div>
+        <!-- Dispatch Panel -->
+        <div class="col-lg-7">
+          <div class="dispatch-panel">
+            <div class="dispatch-header">
+              <h6><i class="fas fa-broadcast-tower me-2 text-orange"></i>Live Dispatch Queue</h6>
+              <span class="mono">as of 11:30 hrs</span>
+            </div>
+            <div class="dispatch-body">
+              <div class="step-row">
+                <div class="step-num">→</div>
+                <div style="flex:1">
+                  <div class="step-title">Electrical Short — Lab Block C, Room 305</div>
+                  <div class="step-desc">Reported by K. Mehta · 09:14 hrs · Priority: Critical</div>
+                </div>
+                <span class="step-badge badge-progress">In Progress</span>
+              </div>
+              <div class="step-row">
+                <div class="step-num">→</div>
+                <div style="flex:1">
+                  <div class="step-title">AC Cooling Failure — Admin Block, Floor 2</div>
+                  <div class="step-desc">Reported by Dr. Rao · 09:55 hrs · Priority: High</div>
+                </div>
+                <span class="step-badge badge-pending">Pending</span>
+              </div>
+              <div class="step-row">
+                <div class="step-num">✓</div>
+                <div style="flex:1">
+                  <div class="step-title">Water Leakage — Boys' Hostel H-3</div>
+                  <div class="step-desc">Closed by S. Yadav · 10:40 hrs · 86 min resolution</div>
+                </div>
+                <span class="step-badge badge-resolved">Resolved</span>
+              </div>
+              <div class="step-row">
+                <div class="step-num">→</div>
+                <div style="flex:1">
+                  <div class="step-title">WiFi Router Down — Library, Wing B</div>
+                  <div class="step-desc">Reported by Librarian · 11:20 hrs · Priority: Medium</div>
+                </div>
+                <span class="step-badge badge-pending">Pending</span>
+              </div>
+            </div>
+            <div class="dispatch-footer">
+              <span>4 issues active</span>
+              <a href="#registry" class="disc-cta">View full registry →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  CATEGORIES — Service Disciplines                       │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <section id="categories" class="section-pad categories-grid">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-lg-8">
+          <span class="label-tag">Service Catalogue</span>
+          <h2 class="section-title">Maintenance Disciplines</h2>
+          <p class="section-sub">
+            Each report is routed to the appropriate trade team with SLA targets
+            enforced by our dispatch protocol.
+          </p>
+        </div>
+      </div>
+      <div class="row g-3">
+
+        <!-- Electrical -->
+        <div class="col-sm-6 col-lg-4">
+          <div class="discipline-card">
+            <div class="disc-header">
+              <div class="disc-icon"><i class="fas fa-bolt"></i></div>
+              <span class="disc-code">ELEC</span>
+            </div>
+            <div class="disc-name">Electrical & Power</div>
+            <div class="disc-desc">
+              Power failures, short circuits, lighting faults, switchboard
+              damage, generator issues across all buildings.
+            </div>
+            <div class="disc-footer">
+              <span class="sla-badge">SLA 2h / 4h</span>
+              <a href="#report" class="disc-cta">Report →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plumbing -->
+        <div class="col-sm-6 col-lg-4">
+          <div class="discipline-card">
+            <div class="disc-header">
+              <div class="disc-icon"><i class="fas fa-faucet"></i></div>
+              <span class="disc-code">PLMB</span>
+            </div>
+            <div class="disc-name">Plumbing & Sanitation</div>
+            <div class="disc-desc">
+              Pipe leaks, blocked drains, broken taps, sewage issues,
+              water supply disruptions in hostels and labs.
+            </div>
+            <div class="disc-footer">
+              <span class="sla-badge">SLA 3h / 6h</span>
+              <a href="#report" class="disc-cta">Report →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Civil -->
+        <div class="col-sm-6 col-lg-4">
+          <div class="discipline-card">
+            <div class="disc-header">
+              <div class="disc-icon"><i class="fas fa-hard-hat"></i></div>
+              <span class="disc-code">CIVL</span>
+            </div>
+            <div class="disc-name">Civil & Structural</div>
+            <div class="disc-desc">
+              Broken doors, windows, walls, ceiling damage, flooring
+              hazards, furniture repairs, ramp or staircase issues.
+            </div>
+            <div class="disc-footer">
+              <span class="sla-badge">SLA 6h / 24h</span>
+              <a href="#report" class="disc-cta">Report →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- HVAC -->
+        <div class="col-sm-6 col-lg-4">
+          <div class="discipline-card">
+            <div class="disc-header">
+              <div class="disc-icon"><i class="fas fa-wind"></i></div>
+              <span class="disc-code">HVAC</span>
+            </div>
+            <div class="disc-name">HVAC & Climate</div>
+            <div class="disc-desc">
+              Air conditioning failures, ventilation faults, fan
+              replacements, AHU maintenance, cooling tower defects.
+            </div>
+            <div class="disc-footer">
+              <span class="sla-badge">SLA 4h / 8h</span>
+              <a href="#report" class="disc-cta">Report →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- IT -->
+        <div class="col-sm-6 col-lg-4">
+          <div class="discipline-card">
+            <div class="disc-header">
+              <div class="disc-icon"><i class="fas fa-network-wired"></i></div>
+              <span class="disc-code">IT</span>
+            </div>
+            <div class="disc-name">IT & Networking</div>
+            <div class="disc-desc">
+              Router/switch failures, internet outages, projector
+              faults, lab computer failures, CCTV issues, EPABX faults.
+            </div>
+            <div class="disc-footer">
+              <span class="sla-badge">SLA 2h / 4h</span>
+              <a href="#report" class="disc-cta">Report →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Safety -->
+        <div class="col-sm-6 col-lg-4">
+          <div class="discipline-card">
+            <div class="disc-header">
+              <div class="disc-icon"><i class="fas fa-fire-extinguisher"></i></div>
+              <span class="disc-code">SAFE</span>
+            </div>
+            <div class="disc-name">Safety & Security</div>
+            <div class="disc-desc">
+              Fire alarm faults, exit light failures, extinguisher
+              expiry, access control issues, CCTV blind spots, hazard zones.
+            </div>
+            <div class="disc-footer">
+              <span class="sla-badge">SLA 1h / 2h</span>
+              <a href="#report" class="disc-cta">Report →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  HOW IT WORKS                                           │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <section id="how-it-works" class="section-pad protocol-section">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col">
+          <span class="label-tag">Resolution Protocol</span>
+          <h2 class="section-title">How a Request is Handled</h2>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6 col-lg-3">
+          <div class="protocol-card">
+            <div class="protocol-num">01</div>
+            <div class="protocol-title">Submit</div>
+            <div class="protocol-desc">
+              Fill out the online form with your location, issue type and
+              priority. A reference ID is issued instantly.
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="protocol-card">
+            <div class="protocol-num">02</div>
+            <div class="protocol-title">Triage</div>
+            <div class="protocol-desc">
+              The Facilities Operations Centre reviews and assigns the
+              appropriate trade team within 30 minutes.
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="protocol-card">
+            <div class="protocol-num">03</div>
+            <div class="protocol-title">Dispatch</div>
+            <div class="protocol-desc">
+              The technician is dispatched. You receive an SMS update.
+              Status is updated live in the registry.
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+          <div class="protocol-card">
+            <div class="protocol-num">04</div>
+            <div class="protocol-title">Close</div>
+            <div class="protocol-desc">
+              On resolution, a closure report is generated and emailed
+              to the requestor for acknowledgement.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  ACTIVE ISSUES REGISTRY                                 │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <section id="registry" class="section-pad registry-section">
+    <div class="container">
+      <div class="row mb-4 align-items-end">
+        <div class="col-lg-8">
+          <span class="label-tag">Live Registry</span>
+          <h2 class="section-title">Active Issues</h2>
+          <p class="section-sub">Open and in-progress maintenance tickets across campus.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+          <a href="#report" class="btn-primary-site d-inline-flex">
+            <i class="fas fa-plus"></i> New Request
+          </a>
+        </div>
+      </div>
+      <div class="row g-3">
+
+        <div class="col-md-6 col-lg-4">
+          <div class="issue-card">
+            <div class="issue-meta">
+              <span class="issue-id">FX-2025-0041</span>
+              <span class="chip chip-critical">Critical</span>
+            </div>
+            <div class="issue-title">Electrical Short Circuit</div>
+            <div class="issue-loc"><i class="fas fa-map-marker-alt me-1"></i>Lab Block C — Room 305</div>
+            <div class="issue-desc">Multiple sockets sparking at test bench area. Lab sealed pending inspection.</div>
+            <div class="issue-footer">
+              <span class="step-badge badge-progress">In Progress</span>
+              <span style="font-size:0.75rem; color:var(--slate); font-family:monospace;">28 Sep, 09:14</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="issue-card">
+            <div class="issue-meta">
+              <span class="issue-id">FX-2025-0040</span>
+              <span class="chip chip-high">High</span>
+            </div>
+            <div class="issue-title">AC Unit Not Cooling</div>
+            <div class="issue-loc"><i class="fas fa-map-marker-alt me-1"></i>Admin Block — Floor 2, Room 204</div>
+            <div class="issue-desc">Split AC showing error code E5. Ambient temp reaching 34°C during working hours.</div>
+            <div class="issue-footer">
+              <span class="step-badge badge-pending">Pending</span>
+              <span style="font-size:0.75rem; color:var(--slate); font-family:monospace;">28 Sep, 09:55</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="issue-card">
+            <div class="issue-meta">
+              <span class="issue-id">FX-2025-0039</span>
+              <span class="chip chip-medium">Medium</span>
+            </div>
+            <div class="issue-title">WiFi Router Offline</div>
+            <div class="issue-loc"><i class="fas fa-map-marker-alt me-1"></i>Library — Wing B, Study Hall</div>
+            <div class="issue-desc">TP-Link router FLR2-LIB-B not responding. Approx. 60 students affected.</div>
+            <div class="issue-footer">
+              <span class="step-badge badge-pending">Pending</span>
+              <span style="font-size:0.75rem; color:var(--slate); font-family:monospace;">28 Sep, 11:20</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="issue-card">
+            <div class="issue-meta">
+              <span class="issue-id">FX-2025-0038</span>
+              <span class="chip chip-high">High</span>
+            </div>
+            <div class="issue-title">Burst Pipe — Washroom</div>
+            <div class="issue-loc"><i class="fas fa-map-marker-alt me-1"></i>Girls' Hostel G-2, Ground Floor</div>
+            <div class="issue-desc">Inlet pipe at GF washroom has a significant burst causing flooding in corridor.</div>
+            <div class="issue-footer">
+              <span class="step-badge badge-progress">In Progress</span>
+              <span style="font-size:0.75rem; color:var(--slate); font-family:monospace;">27 Sep, 22:40</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="issue-card">
+            <div class="issue-meta">
+              <span class="issue-id">FX-2025-0037</span>
+              <span class="chip chip-medium">Medium</span>
+            </div>
+            <div class="issue-title">Projector Display Fault</div>
+            <div class="issue-loc"><i class="fas fa-map-marker-alt me-1"></i>Auditorium — AV Control Room</div>
+            <div class="issue-desc">Epson EB-980W projector showing vertical lines on output. Lamp age: 1,800 hrs.</div>
+            <div class="issue-footer">
+              <span class="step-badge badge-pending">Pending</span>
+              <span style="font-size:0.75rem; color:var(--slate); font-family:monospace;">27 Sep, 16:05</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="issue-card">
+            <div class="issue-meta">
+              <span class="issue-id">FX-2025-0036</span>
+              <span class="chip chip-low">Low</span>
+            </div>
+            <div class="issue-title">Broken Door Handle</div>
+            <div class="issue-loc"><i class="fas fa-map-marker-alt me-1"></i>Mechanical Dept — Corridor D</div>
+            <div class="issue-desc">Door handle detached from frame at Room MD-12. Door can be opened but is unsecured.</div>
+            <div class="issue-footer">
+              <span class="step-badge badge-pending">Pending</span>
+              <span style="font-size:0.75rem; color:var(--slate); font-family:monospace;">27 Sep, 14:30</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  REPORT FORM                                            │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <section id="report" class="section-pad form-section">
+    <div class="container">
+      <div class="row g-4">
+
+        <!-- Form -->
+        <div class="col-lg-7">
+          <div class="form-card">
+            <span class="label-tag">Maintenance Request Form</span>
+            <div class="form-card-title">Report an Issue</div>
+            <div class="form-card-sub">
+              All fields marked * are required. You will receive a reference number on submission.
+            </div>
+
+            <form id="reportForm" novalidate>
+              <div class="row g-3">
+
+                <div class="col-md-6">
+                  <label class="form-label">Full Name *</label>
+                  <input type="text" class="form-control" id="fullName" placeholder="e.g. Ananya Sharma" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Employee / Roll No. *</label>
+                  <input type="text" class="form-control" id="empId" placeholder="e.g. 2021BCE0045" required />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Email Address *</label>
+                  <input type="email" class="form-control" id="email" placeholder="you@college.edu" required />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Mobile Number *</label>
+                  <div class="input-group">
+                    <span class="input-group-text">+91</span>
+                    <input type="tel" class="form-control" id="mobile" placeholder="9XXXXXXXXX" maxlength="10" required />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Department / Block *</label>
+                  <select class="form-select" id="department" required>
+                    <option value="">Select a location</option>
+                    <option>CSE Department</option>
+                    <option>Mechanical Department</option>
+                    <option>Civil Department</option>
+                    <option>ECE Department</option>
+                    <option>Admin Block</option>
+                    <option>Library</option>
+                    <option>Boys' Hostel</option>
+                    <option>Girls' Hostel</option>
+                    <option>Auditorium</option>
+                    <option>Canteen / Mess</option>
+                    <option>Sports Complex</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Room / Zone</label>
+                  <input type="text" class="form-control" id="roomZone" placeholder="e.g. Room 305, Lab-C" />
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Issue Category *</label>
+                  <select class="form-select" id="category" required>
+                    <option value="">Select category</option>
+                    <option value="ELEC">Electrical & Power</option>
+                    <option value="PLMB">Plumbing & Sanitation</option>
+                    <option value="CIVL">Civil & Structural</option>
+                    <option value="HVAC">HVAC & Climate</option>
+                    <option value="IT">IT & Networking</option>
+                    <option value="SAFE">Safety & Security</option>
+                    <option value="OTHER">Other</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Priority *</label>
+                  <select class="form-select" id="priority" required>
+                    <option value="">Select priority</option>
+                    <option value="critical">Critical — Immediate risk / shutdown</option>
+                    <option value="high">High — Significant disruption</option>
+                    <option value="medium">Medium — Inconvenience, no shutdown</option>
+                    <option value="low">Low — Minor / cosmetic</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Issue Title *</label>
+                  <input type="text" class="form-control" id="issueTitle" placeholder="Brief one-line summary" required maxlength="80" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Description *</label>
+                  <textarea class="form-control" id="description" rows="4"
+                    placeholder="Describe the problem in detail — what happened, when it started, any safety risks, equipment model if known."
+                    required minlength="20"></textarea>
+                  <div class="form-text mt-1">Minimum 20 characters. The more detail you provide, the faster the resolution.</div>
+                </div>
+
+                <div class="col-12 mt-2">
+                  <button type="button" class="btn-submit" id="submitBtn" onclick="submitRequest()">
+                    <i class="fas fa-paper-plane"></i> Submit Maintenance Request
+                  </button>
+                  <div class="btn-submit-sub mt-2">Ref. ID will be generated on successful submission</div>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="col-lg-5 d-flex flex-column gap-3">
+
+          <!-- SLA Table -->
+          <div class="sla-panel">
+            <div class="sla-panel-header">
+              <h6><i class="fas fa-clock me-2 text-orange"></i>Response SLAs</h6>
+              <span class="mono" style="font-size:0.7rem; color:var(--slate)">AY 2025–26</span>
+            </div>
+            <table class="sla-table">
+              <thead>
+                <tr>
+                  <th>Priority</th>
+                  <th>1st Response</th>
+                  <th>Resolution</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="chip chip-critical">Critical</span></td>
+                  <td>30 min</td>
+                  <td>2 hrs</td>
+                </tr>
+                <tr>
+                  <td><span class="chip chip-high">High</span></td>
+                  <td>1 hr</td>
+                  <td>4 hrs</td>
+                </tr>
+                <tr>
+                  <td><span class="chip chip-medium">Medium</span></td>
+                  <td>2 hrs</td>
+                  <td>8 hrs</td>
+                </tr>
+                <tr>
+                  <td><span class="chip chip-low">Low</span></td>
+                  <td>4 hrs</td>
+                  <td>48 hrs</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Contacts -->
+          <div class="contact-panel">
+            <h6>Facilities Operations Centre</h6>
+            <p>Direct contacts for urgent escalation</p>
+            <div class="contact-line">
+              <span class="label">Emergency Hotline</span>
+              <span class="val">+91 98765 00000</span>
+            </div>
+            <div class="contact-line">
+              <span class="label">Electrical Team</span>
+              <span class="val">Ext. 5201</span>
+            </div>
+            <div class="contact-line">
+              <span class="label">Plumbing Team</span>
+              <span class="val">Ext. 5202</span>
+            </div>
+            <div class="contact-line">
+              <span class="label">IT Helpdesk</span>
+              <span class="val">Ext. 5205</span>
+            </div>
+            <div class="contact-line">
+              <span class="label">FOC Email</span>
+              <span class="val">facilities@college.edu</span>
+            </div>
+            <div class="contact-line">
+              <span class="label">Working Hours</span>
+              <span class="val">Mon–Sat, 08:00–20:00</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  FOOTER                                                 │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-5">
+        <div class="col-lg-4">
+          <div class="footer-brand-name mb-2">FixIt</div>
+          <div class="footer-desc">
+            The official maintenance and facilities management portal for our campus.
+            Ensuring safe, functional, and well-maintained spaces for students,
+            faculty, and staff.
+          </div>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="footer-heading">Portal</div>
+          <ul class="footer-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#categories">Services</a></li>
+            <li><a href="#how-it-works">Process</a></li>
+            <li><a href="#registry">Active Issues</a></li>
+            <li><a href="#report">Report Issue</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <div class="footer-heading">Departments</div>
+          <ul class="footer-links">
+            <li><a href="#">Academic Blocks</a></li>
+            <li><a href="#">Hostels</a></li>
+            <li><a href="#">Admin & HR</a></li>
+            <li><a href="#">Library</a></li>
+            <li><a href="#">Sports Complex</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <div class="footer-heading">Contact</div>
+          <div class="mb-1" style="font-size:0.82rem; color:#777;">Facilities Operations Centre</div>
+          <div class="mb-1"><span class="footer-contact-val">+91 98765 00000</span></div>
+          <div class="mb-1" style="font-size:0.82rem; color:#777;">facilities@college.edu</div>
+          <div class="mt-2" style="font-size:0.78rem; color:#555;">Mon–Sat · 08:00 – 20:00<br />Emergency response 24 × 7</div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 FixIt — Facilities Management. All rights reserved.</span>
+        <span>Built by Facilities IT Cell</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ┌─────────────────────────────────────────────────────────┐ -->
+  <!-- │  SUCCESS MODAL                                          │ -->
+  <!-- └─────────────────────────────────────────────────────────┘ -->
+  <div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="fas fa-check-circle me-2" style="color:#3ecf6f;"></i>Request Submitted</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center">
+          <div class="ref-box mb-3">
+            <div class="ref-label">Your Reference ID</div>
+            <div class="ref-id" id="refId">FX-2025-0000</div>
+          </div>
+          <p style="font-size:0.9rem; color:var(--slate);">
+            Your request has been registered with the Facilities Operations Centre.
+            You will receive an email and SMS confirmation within 15 minutes.
+          </p>
+        </div>
+        <div class="modal-footer justify-content-between">
+          <span style="font-size:0.8rem; color:var(--slate);">Save your reference ID for tracking.</span>
+          <button type="button" class="btn-primary-site" data-bs-dismiss="modal">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Minimal JS for form submission (HTML+CSS practical focuses on structure/style)
+    function submitRequest() {
+      const form = document.getElementById('reportForm');
+      const fields = ['fullName','empId','email','mobile','department','category','priority','issueTitle','description'];
+      let valid = true;
+
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          el.classList.add('is-invalid');
+          valid = false;
+        } else {
+          el.classList.remove('is-invalid');
+        }
+      });
+
+      if (!valid) {
+        alert('Please fill in all required fields before submitting.');
+        return;
+      }
+
+      const year  = new Date().getFullYear();
+      const num   = String(Math.floor(Math.random() * 9000) + 1000);
+      document.getElementById('refId').textContent = `FX-${year}-${num}`;
+      new bootstrap.Modal(document.getElementById('successModal')).show();
+      form.reset();
+    }
+
+    // Smooth active nav on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks  = document.querySelectorAll('.navbar-nav .nav-link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      navLinks.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

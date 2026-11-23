@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FixIt — Issue Dashboard | Campus Facilities Management</title>
+  <meta name="description" content="Manage and track all campus maintenance requests. Submit new issues, filter by status, and monitor live resolution progress." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --charcoal:       #1E2120;
+      --charcoal-light: #2C3230;
+      --warm-white:     #F5F3EC;
+      --white:          #FFFFFF;
+      --orange:         #E8722A;
+      --orange-dark:    #C85E1C;
+      --slate:          #5C6461;
+      --border:         #E0DDD4;
+      --green:          #2E6B45;
+      --green-bg:       #EAF3ED;
+      --amber:          #C48B1A;
+      --amber-bg:       #FBF4E3;
+      --red:            #B03535;
+      --red-bg:         #FAEAEA;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Sidebar ────────────────────────────────────────────── */
+    .app-layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 230px;
+      flex-shrink: 0;
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+      overflow-y: auto;
+    }
+    .sidebar-brand {
+      padding: 1.25rem 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .brand-icon { width: 32px; height: 32px; background: var(--orange); border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+    .brand-icon i { color: #fff; font-size: 0.95rem; }
+    .brand-text { color: #fff; font-weight: 800; font-size: 1.1rem; }
+    .brand-sub  { color: #666; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; }
+
+    .sidebar-section { padding: 0.75rem 0.75rem 0; }
+    .sidebar-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: #555; padding: 0.5rem 0.5rem 0.25rem; font-weight: 600; }
+    .sidebar-link {
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 3px;
+      color: #888;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border: none; background: none; width: 100%; text-align: left;
+    }
+    .sidebar-link:hover { background: rgba(255,255,255,0.06); color: #ccc; }
+    .sidebar-link.active { background: rgba(232,114,42,0.15); color: var(--orange); }
+    .sidebar-link i { width: 16px; font-size: 0.82rem; }
+    .sidebar-badge {
+      margin-left: auto; font-size: 0.65rem; font-weight: 700;
+      background: var(--orange); color: #fff;
+      border-radius: 10px; padding: 0.1rem 0.4rem;
+      min-width: 18px; text-align: center;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.75rem;
+      color: #444;
+    }
+
+    /* ── Main Area ──────────────────────────────────────────── */
+    .main-content { margin-left: 230px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 90;
+    }
+    .topbar-left h1 { font-size: 1.05rem; font-weight: 700; margin: 0; }
+    .topbar-left p  { font-size: 0.75rem; color: var(--slate); margin: 0; }
+    .btn-orange {
+      background: var(--orange); color: #fff; border: none;
+      padding: 0.55rem 1rem; border-radius: 3px; font-weight: 700;
+      font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 0.4rem;
+      transition: background 0.15s;
+    }
+    .btn-orange:hover { background: var(--orange-dark); }
+    .btn-outline {
+      background: transparent; color: var(--charcoal);
+      border: 1.5px solid var(--border); padding: 0.5rem 0.9rem;
+      border-radius: 3px; font-weight: 600; font-size: 0.82rem;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--charcoal); }
+
+    /* ── Dashboard Page ─────────────────────────────────────── */
+    .page { padding: 1.75rem; display: none; }
+    .page.active { display: block; }
+
+    /* Stats Row */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 1.1rem 1.25rem;
+      display: flex; flex-direction: column; gap: 0.25rem;
+    }
+    .stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--slate); font-weight: 600; }
+    .stat-val   { font-size: 1.75rem; font-weight: 800; }
+    .stat-sub   { font-size: 0.72rem; color: var(--slate); }
+    .stat-card.orange { border-left: 3px solid var(--orange); }
+    .stat-card.amber  { border-left: 3px solid var(--amber); }
+    .stat-card.green  { border-left: 3px solid var(--green); }
+    .stat-card.red    { border-left: 3px solid var(--red); }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .filter-bar input, .filter-bar select {
+      border: 1px solid var(--border); border-radius: 3px;
+      padding: 0.5rem 0.75rem; font-size: 0.82rem;
+      color: var(--charcoal); background: var(--white);
+      font-family: inherit;
+    }
+    .filter-bar input { flex: 1; min-width: 180px; }
+    .filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: var(--orange); }
+    .filter-chip {
+      padding: 0.4rem 0.8rem; border-radius: 2px; border: 1px solid var(--border);
+      font-size: 0.78rem; font-weight: 600; cursor: pointer;
+      background: var(--white); color: var(--slate); transition: all 0.15s;
+    }
+    .filter-chip.on { background: var(--charcoal); color: #fff; border-color: var(--charcoal); }
+
+    /* Issues Table */
+    .issues-table-wrap {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .issues-table-header {
+      padding: 0.9rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .issues-table-header h2 { font-size: 0.9rem; font-weight: 700; margin: 0; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    thead tr { background: var(--warm-white); }
+    thead th {
+      padding: 0.65rem 1.1rem; text-align: left;
+      font-size: 0.68rem; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--slate); font-weight: 600;
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fafaf8; }
+    tbody td { padding: 0.8rem 1.1rem; vertical-align: middle; }
+
+    .td-id     { font-family: monospace; font-size: 0.75rem; font-weight: 700; color: var(--charcoal); background: var(--warm-white); border: 1px solid var(--border); padding: 0.12rem 0.4rem; border-radius: 2px; white-space: nowrap; }
+    .td-title  { font-weight: 600; }
+    .td-loc    { color: var(--slate); font-size: 0.78rem; }
+    .td-date   { font-family: monospace; font-size: 0.72rem; color: var(--slate); white-space: nowrap; }
+
+    /* Priority chips */
+    .chip { display: inline-block; font-size: 0.67rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 2px; white-space: nowrap; }
+    .chip-critical { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(176,53,53,0.3); }
+    .chip-high     { background: #fff0e5;          color: #c05a00;       border: 1px solid rgba(192,90,0,0.3); }
+    .chip-medium   { background: var(--amber-bg);  color: var(--amber);  border: 1px solid rgba(196,139,26,0.3); }
+    .chip-low      { background: var(--warm-white); color: var(--slate); border: 1px solid var(--border); }
+
+    /* Status badges */
+    .status { display: inline-block; font-size: 0.67rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 2px; white-space: nowrap; }
+    .status-pending  { background: var(--amber-bg);  color: var(--amber);  border: 1px solid rgba(196,139,26,0.25); }
+    .status-progress { background: #fff3eb;           color: var(--orange); border: 1px solid rgba(232,114,42,0.25); }
+    .status-resolved { background: var(--green-bg);   color: var(--green);  border: 1px solid rgba(46,107,69,0.25); }
+
+    /* Row action buttons */
+    .row-btns { display: flex; gap: 0.3rem; }
+    .btn-icon {
+      border: 1px solid var(--border); background: var(--white);
+      border-radius: 3px; padding: 0.3rem 0.5rem; font-size: 0.78rem;
+      cursor: pointer; color: var(--slate); transition: all 0.12s;
+    }
+    .btn-icon:hover { border-color: var(--orange); color: var(--orange); }
+    .btn-icon.del:hover { border-color: var(--red); color: var(--red); }
+
+    /* Empty state */
+    .empty-state { padding: 3rem; text-align: center; color: var(--slate); }
+    .empty-state i { font-size: 2rem; color: var(--border); margin-bottom: 0.75rem; }
+    .empty-state p { font-size: 0.9rem; }
+
+    /* ── Form Panel (modal-style slide-in) ──────────────────── */
+    .form-overlay { position: fixed; inset: 0; background: rgba(30,33,32,0.55); z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .form-overlay.open { opacity: 1; pointer-events: all; }
+
+    .form-panel {
+      position: fixed; top: 0; right: -520px; bottom: 0; width: 480px;
+      background: var(--white); box-shadow: -8px 0 32px rgba(0,0,0,0.12);
+      z-index: 201; overflow-y: auto;
+      display: flex; flex-direction: column;
+      transition: right 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    .form-panel.open { right: 0; }
+
+    .form-panel-header {
+      background: var(--charcoal); color: #fff;
+      padding: 1.1rem 1.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-shrink: 0;
+    }
+    .form-panel-header h2 { font-size: 0.95rem; color: #fff; margin: 0; }
+    .btn-close-panel { background: none; border: none; color: #888; font-size: 1.2rem; cursor: pointer; padding: 0; }
+    .btn-close-panel:hover { color: #fff; }
+    .form-panel-body { padding: 1.5rem; flex: 1; }
+    .form-panel-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); background: var(--warm-white); display: flex; gap: 0.75rem; }
+
+    .fp-label { font-size: 0.78rem; font-weight: 600; color: var(--charcoal); margin-bottom: 0.3rem; display: block; }
+    .fp-field {
+      width: 100%; border: 1px solid var(--border); border-radius: 3px;
+      padding: 0.55rem 0.75rem; font-size: 0.85rem; font-family: inherit;
+      color: var(--charcoal); background: var(--white); margin-bottom: 0.85rem;
+    }
+    .fp-field:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,114,42,0.1); }
+    .fp-field.error { border-color: var(--red); }
+    .fp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    /* ── Detail Panel ───────────────────────────────────────── */
+    .detail-panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+    .detail-header { background: var(--charcoal); padding: 1.1rem 1.5rem; border-radius: 3px 3px 0 0; display: flex; justify-content: space-between; align-items: center; }
+    .detail-header h2 { font-size: 0.95rem; color: #fff; margin: 0; }
+    .detail-body { padding: 1.5rem; }
+
+    /* Toast */
+    .toast-area { position: fixed; bottom: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; z-index: 300; }
+    .toast-msg {
+      background: var(--charcoal); color: #fff;
+      padding: 0.75rem 1.25rem; border-radius: 3px;
+      font-size: 0.82rem; border-left: 3px solid var(--orange);
+      animation: toastIn 0.2s ease, toastOut 0.3s 2.7s ease forwards;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    @keyframes toastIn  { from { opacity: 0; transform: translateY(12px); } to   { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateY(0); }    to   { opacity: 0; transform: translateY(12px); } }
+
+    /* ── Analytics Page ─────────────────────────────────────── */
+    .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .an-card { background: var(--white); border: 1px solid var(--border); border-radius: 3px; padding: 1.25rem; }
+    .an-card h3 { font-size: 0.88rem; font-weight: 700; margin-bottom: 1rem; }
+
+    .bar-chart { display: flex; flex-direction: column; gap: 0.6rem; }
+    .bar-row { display: flex; align-items: center; gap: 0.75rem; font-size: 0.78rem; }
+    .bar-row .bar-label { width: 130px; flex-shrink: 0; color: var(--slate); font-size: 0.75rem; }
+    .bar-track { flex: 1; background: var(--warm-white); border-radius: 2px; height: 8px; overflow: hidden; }
+    .bar-fill  { height: 100%; background: var(--orange); border-radius: 2px; transition: width 0.4s; }
+    .bar-fill.green { background: var(--green); }
+    .bar-fill.amber { background: var(--amber); }
+    .bar-fill.red   { background: var(--red); }
+    .bar-val { width: 28px; text-align: right; font-family: monospace; font-weight: 700; font-size: 0.75rem; }
+
+    .donut-legend { display: flex; flex-direction: column; gap: 0.5rem; }
+    .legend-row   { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; }
+    .legend-dot   { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-pct   { margin-left: auto; font-weight: 700; font-family: monospace; font-size: 0.78rem; }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 800px) {
+      .sidebar { width: 0; overflow: hidden; }
+      .main-content { margin-left: 0; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .analytics-grid { grid-template-columns: 1fr; }
+      .form-panel { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-layout">
+
+  <!-- ── SIDEBAR ────────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon"><i class="fas fa-wrench"></i></div>
+      <div>
+        <div class="brand-text">FixIt</div>
+        <div class="brand-sub">Facilities</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <button class="sidebar-link active" onclick="showPage('dashboard', this)">
+        <i class="fas fa-th-large"></i> Dashboard
+      </button>
+      <button class="sidebar-link" onclick="showPage('issues', this)">
+        <i class="fas fa-clipboard-list"></i> All Issues
+        <span class="sidebar-badge" id="sidebarCount">0</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('analytics', this)">
+        <i class="fas fa-chart-bar"></i> Analytics
+      </button>
+    </div>
+
+    <div class="sidebar-section mt-3">
+      <div class="sidebar-label">Actions</div>
+      <button class="sidebar-link" onclick="openForm()">
+        <i class="fas fa-plus"></i> New Request
+      </button>
+    </div>
+
+    <div class="sidebar-footer">
+      <div style="color:#555; margin-bottom:0.25rem;">Facilities Ops Centre</div>
+      <div style="color:#888;">Mon–Sat · 08:00–20:00</div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ───────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="pageSubtitle">Overview of all maintenance activity</p>
+      </div>
+      <div style="display:flex; gap:0.5rem; align-items:center;">
+        <button class="btn-orange" onclick="openForm()">
+          <i class="fas fa-plus"></i> New Request
+        </button>
+      </div>
+    </div>
+
+    <!-- ── DASHBOARD PAGE ─── -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-row" id="statsRow">
+        <!-- filled by JS -->
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 360px; gap:1rem;">
+        <!-- Recent Issues mini table -->
+        <div class="issues-table-wrap">
+          <div class="issues-table-header">
+            <h2>Recent Requests</h2>
+            <button class="btn-outline" onclick="showPage('issues', document.querySelector('.sidebar-link:nth-child(2)'))">View All →</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th><th>Title</th><th>Priority</th><th>Status</th><th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="recentTbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Breakdown panel -->
+        <div class="an-card">
+          <h3>Status Breakdown</h3>
+          <div class="bar-chart" id="dashBreakdown"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ISSUES PAGE ─── -->
+    <div class="page" id="page-issues">
+      <div class="filter-bar" id="filterBar">
+        <input type="text" id="searchInput" placeholder="Search by title or location…" oninput="applyFilters()" />
+        <select id="filterStatus" onchange="applyFilters()">
+          <option value="">All Statuses</option>
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Resolved">Resolved</option>
+        </select>
+        <select id="filterPriority" onchange="applyFilters()">
+          <option value="">All Priorities</option>
+          <option value="Critical">Critical</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+        <select id="filterCategory" onchange="applyFilters()">
+          <option value="">All Categories</option>
+          <option value="ELEC">Electrical</option>
+          <option value="PLMB">Plumbing</option>
+          <option value="CIVL">Civil</option>
+          <option value="HVAC">HVAC</option>
+          <option value="IT">IT</option>
+          <option value="SAFE">Safety</option>
+          <option value="OTHER">Other</option>
+        </select>
+        <button class="filter-chip" id="clearBtn" onclick="clearFilters()">Clear</button>
+      </div>
+      <div class="issues-table-wrap">
+        <div class="issues-table-header">
+          <h2>Issue Registry <span id="issueCount" style="font-weight:400; color:var(--slate); font-size:0.82rem;"></span></h2>
+          <button class="btn-orange" onclick="openForm()"><i class="fas fa-plus"></i> New</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Reported</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="issuesTbody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" style="display:none;">
+            <i class="fas fa-inbox"></i>
+            <p>No issues match your current filters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ANALYTICS PAGE ─── -->
+    <div class="page" id="page-analytics">
+      <div class="analytics-grid">
+        <div class="an-card">
+          <h3>Issues by Category</h3>
+          <div class="bar-chart" id="catChart"></div>
+        </div>
+        <div class="an-card">
+          <h3>Issues by Priority</h3>
+          <div class="bar-chart" id="priChart"></div>
+        </div>
+        <div class="an-card">
+          <h3>Resolution Status</h3>
+          <div class="donut-legend" id="statusChart"></div>
+        </div>
+        <div class="an-card">
+          <h3>Daily Submissions (last 7 days)</h3>
+          <div class="bar-chart" id="dailyChart"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── FORM PANEL ─────────────────────────────────────────── -->
+<div class="form-overlay" id="formOverlay" onclick="closeForm()"></div>
+<div class="form-panel" id="formPanel">
+  <div class="form-panel-header">
+    <h2><i class="fas fa-plus-circle me-2" style="color:var(--orange)"></i>New Maintenance Request</h2>
+    <button class="btn-close-panel" onclick="closeForm()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="form-panel-body">
+    <form id="mainForm" novalidate>
+      <div class="fp-row">
+        <div>
+          <label class="fp-label">Full Name *</label>
+          <input class="fp-field" id="fp-name" type="text" placeholder="Your name" />
+        </div>
+        <div>
+          <label class="fp-label">Roll / Emp No. *</label>
+          <input class="fp-field" id="fp-empid" type="text" placeholder="2021BCE0045" />
+        </div>
+      </div>
+      <div class="fp-row">
+        <div>
+          <label class="fp-label">Email *</label>
+          <input class="fp-field" id="fp-email" type="email" placeholder="you@college.edu" />
+        </div>
+        <div>
+          <label class="fp-label">Mobile *</label>
+          <input class="fp-field" id="fp-mobile" type="tel" maxlength="10" placeholder="9XXXXXXXXX" />
+        </div>
+      </div>
+      <div class="fp-row">
+        <div>
+          <label class="fp-label">Department / Block *</label>
+          <select class="fp-field" id="fp-dept">
+            <option value="">Select location</option>
+            <option>CSE Department</option>
+            <option>Mechanical Department</option>
+            <option>Civil Department</option>
+            <option>ECE Department</option>
+            <option>Admin Block</option>
+            <option>Library</option>
+            <option>Boys' Hostel</option>
+            <option>Girls' Hostel</option>
+            <option>Auditorium</option>
+            <option>Canteen / Mess</option>
+            <option>Sports Complex</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="fp-label">Room / Zone</label>
+          <input class="fp-field" id="fp-room" type="text" placeholder="Room 305, Lab-C" />
+        </div>
+      </div>
+      <div class="fp-row">
+        <div>
+          <label class="fp-label">Category *</label>
+          <select class="fp-field" id="fp-cat">
+            <option value="">Select category</option>
+            <option value="ELEC">Electrical & Power</option>
+            <option value="PLMB">Plumbing & Sanitation</option>
+            <option value="CIVL">Civil & Structural</option>
+            <option value="HVAC">HVAC & Climate</option>
+            <option value="IT">IT & Networking</option>
+            <option value="SAFE">Safety & Security</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="fp-label">Priority *</label>
+          <select class="fp-field" id="fp-priority">
+            <option value="">Select priority</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="fp-label">Issue Title *</label>
+        <input class="fp-field" id="fp-title" type="text" placeholder="One-line summary" maxlength="80" />
+      </div>
+      <div>
+        <label class="fp-label">Description * <span style="font-weight:400; color:var(--slate); font-size:0.72rem;">(min 20 chars)</span></label>
+        <textarea class="fp-field" id="fp-desc" rows="4" placeholder="Describe the issue in detail…"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="form-panel-footer">
+    <button class="btn-orange" style="flex:1" onclick="submitForm()">
+      <i class="fas fa-paper-plane"></i> Submit Request
+    </button>
+    <button class="btn-outline" onclick="closeForm()">Cancel</button>
+  </div>
+</div>
+
+<!-- ── TOAST AREA ──────────────────────────────────────────── -->
+<div class="toast-area" id="toastArea"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  FixIt Practical 02 — Vanilla JS Issue Tracker
+//  Data stored in localStorage as JSON
+// ═══════════════════════════════════════════════════════════════
+
+const CAT_NAMES = { ELEC:'Electrical', PLMB:'Plumbing', CIVL:'Civil', HVAC:'HVAC', IT:'IT', SAFE:'Safety', OTHER:'Other' };
+const EMAIL_RE  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MOBILE_RE = /^[6-9]\d{9}$/;
+
+// ─── Seed Data ──────────────────────────────────────────────
+const SEED = [
+  { id:'FX-2025-0041', name:'K. Mehta',     empId:'2021CSE001', email:'kmehta@college.edu',     mobile:'9876543210', dept:'CSE Department',       room:'Room 305',     cat:'ELEC',  priority:'Critical', title:'Electrical Short Circuit',     desc:'Multiple sockets sparking at test bench area. Lab sealed pending inspection.',  status:'In Progress', date:'2026-09-28T09:14:00' },
+  { id:'FX-2025-0040', name:'Dr. Rao',      empId:'FAC-EE-012', email:'drao@college.edu',        mobile:'9123456789', dept:'Admin Block',           room:'Room 204',     cat:'HVAC',  priority:'High',     title:'AC Unit Not Cooling',           desc:'Split AC showing error code E5. Ambient temp reaching 34°C during working hours.', status:'Pending',     date:'2026-09-28T09:55:00' },
+  { id:'FX-2025-0039', name:'Librarian',    empId:'FAC-LIB-01', email:'library@college.edu',     mobile:'9988776655', dept:'Library',               room:'Wing B',       cat:'IT',    priority:'Medium',   title:'WiFi Router Offline',           desc:'TP-Link router FLR2-LIB-B not responding. Approx 60 students affected.',       status:'Pending',     date:'2026-09-28T11:20:00' },
+  { id:'FX-2025-0038', name:'Warden G-2',   empId:'FAC-HST-03', email:'wardenG2@college.edu',    mobile:'9654321098', dept:"Girls' Hostel",          room:'Ground Floor', cat:'PLMB',  priority:'High',     title:'Burst Pipe — Washroom',         desc:'Inlet pipe at GF washroom has burst causing flooding in corridor.',             status:'In Progress', date:'2026-09-27T22:40:00' },
+  { id:'FX-2025-0037', name:'AV Manager',   empId:'FAC-AUD-01', email:'av@college.edu',          mobile:'9871234560', dept:'Auditorium',            room:'AV Control',   cat:'IT',    priority:'Medium',   title:'Projector Display Fault',       desc:'Epson EB-980W projector showing vertical lines on output. Lamp age 1800 hrs.', status:'Pending',     date:'2026-09-27T16:05:00' },
+  { id:'FX-2025-0036', name:'R. Joshi',     empId:'2020ME0012', email:'rjoshi@college.edu',      mobile:'9012345678', dept:'Mechanical Department', room:'Corridor D',   cat:'CIVL',  priority:'Low',      title:'Broken Door Handle',            desc:'Door handle detached from frame at Room MD-12. Door unsecured.',               status:'Pending',     date:'2026-09-27T14:30:00' },
+  { id:'FX-2025-0035', name:'S. Yadav',     empId:'FAC-EL-007', email:'syadav@college.edu',      mobile:'9765432109', dept:"Boys' Hostel",          room:'H-3 Block',    cat:'PLMB',  priority:'High',     title:'Water Leakage — H-3',           desc:'Overhead tank overflow pipe leaking into ground floor rooms.',                  status:'Resolved',    date:'2026-09-27T08:10:00' },
+  { id:'FX-2025-0034', name:'T. Krishnan',  empId:'2022ECE0088',email:'tkrishn@college.edu',     mobile:'9845678901', dept:'ECE Department',        room:'Lab E-204',    cat:'ELEC',  priority:'High',     title:'Lab Power Supply Unit Blown',   desc:'3 PSU units in electronics lab showing no output. Fuses suspected.',           status:'Resolved',    date:'2026-09-26T13:45:00' },
+];
+
+// ─── State ───────────────────────────────────────────────────
+function loadIssues() {
+  const raw = localStorage.getItem('fixit_issues');
+  if (raw) return JSON.parse(raw);
+  localStorage.setItem('fixit_issues', JSON.stringify(SEED));
+  return SEED;
+}
+function saveIssues(arr) {
+  localStorage.setItem('fixit_issues', JSON.stringify(arr));
+}
+
+let issues = loadIssues();
+let filtered = [...issues];
+let currentPage = 'dashboard';
+
+// ─── Page Navigation ─────────────────────────────────────────
+function showPage(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  currentPage = page;
+
+  const titles = { dashboard:'Dashboard', issues:'Issue Registry', analytics:'Analytics' };
+  const subs   = { dashboard:'Overview of all maintenance activity', issues:'All submitted maintenance requests', analytics:'Summary statistics and breakdowns' };
+  document.getElementById('pageTitle').textContent    = titles[page];
+  document.getElementById('pageSubtitle').textContent = subs[page];
+
+  issues = loadIssues();
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'issues')    { filtered = [...issues]; renderIssuesTable(filtered); }
+  if (page === 'analytics') renderAnalytics();
+}
+
+// ─── Dashboard ───────────────────────────────────────────────
+function renderDashboard() {
+  const total     = issues.length;
+  const pending   = issues.filter(i => i.status === 'Pending').length;
+  const progress  = issues.filter(i => i.status === 'In Progress').length;
+  const resolved  = issues.filter(i => i.status === 'Resolved').length;
+
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card orange">
+      <div class="stat-label">Total Requests</div>
+      <div class="stat-val">${total}</div>
+      <div class="stat-sub">All time</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-label">Pending</div>
+      <div class="stat-val">${pending}</div>
+      <div class="stat-sub">Awaiting dispatch</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">In Progress</div>
+      <div class="stat-val">${progress}</div>
+      <div class="stat-sub">Technician assigned</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Resolved</div>
+      <div class="stat-val">${resolved}</div>
+      <div class="stat-sub">${total ? Math.round((resolved/total)*100) : 0}% closure rate</div>
+    </div>
+  `;
+
+  // Recent 5
+  const recent = [...issues].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0,5);
+  document.getElementById('recentTbody').innerHTML = recent.map(i => `
+    <tr>
+      <td><span class="td-id">${i.id}</span></td>
+      <td class="td-title">${escHtml(i.title)}</td>
+      <td>${chipHtml(i.priority)}</td>
+      <td>${statusHtml(i.status)}</td>
+      <td class="td-date">${fmtDate(i.date)}</td>
+    </tr>
+  `).join('');
+
+  // Breakdown bars
+  const max = Math.max(pending, progress, resolved, 1);
+  document.getElementById('dashBreakdown').innerHTML = `
+    ${barRow('Pending',     pending,  max, 'amber')}
+    ${barRow('In Progress', progress, max, '')}
+    ${barRow('Resolved',    resolved, max, 'green')}
+  `;
+
+  document.getElementById('sidebarCount').textContent = pending + progress;
+}
+
+function barRow(label, val, max, cls) {
+  const pct = max ? Math.round((val / max) * 100) : 0;
+  return `<div class="bar-row">
+    <div class="bar-label">${label}</div>
+    <div class="bar-track"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
+    <div class="bar-val">${val}</div>
+  </div>`;
+}
+
+// ─── Issues Table ─────────────────────────────────────────────
+function renderIssuesTable(list) {
+  document.getElementById('issueCount').textContent = `— ${list.length} result${list.length !== 1 ? 's' : ''}`;
+  const tbody = document.getElementById('issuesTbody');
+  if (list.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  document.getElementById('emptyState').style.display = 'none';
+  tbody.innerHTML = list.map(i => `
+    <tr>
+      <td><span class="td-id">${i.id}</span></td>
+      <td class="td-title">${escHtml(i.title)}</td>
+      <td><span style="font-size:0.75rem; color:var(--slate);">${CAT_NAMES[i.cat] || i.cat}</span></td>
+      <td class="td-loc">${escHtml(i.dept)}${i.room ? ' · ' + escHtml(i.room) : ''}</td>
+      <td>${chipHtml(i.priority)}</td>
+      <td>${statusHtml(i.status)}</td>
+      <td class="td-date">${fmtDate(i.date)}</td>
+      <td>
+        <div class="row-btns">
+          <button class="btn-icon" title="Mark Resolved" onclick="resolveIssue('${i.id}')"><i class="fas fa-check"></i></button>
+          <button class="btn-icon del" title="Delete" onclick="deleteIssue('${i.id}')"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function applyFilters() {
+  issues = loadIssues();
+  const q    = document.getElementById('searchInput').value.toLowerCase();
+  const st   = document.getElementById('filterStatus').value;
+  const pri  = document.getElementById('filterPriority').value;
+  const cat  = document.getElementById('filterCategory').value;
+
+  filtered = issues.filter(i => {
+    const matchQ   = !q   || i.title.toLowerCase().includes(q) || (i.dept + ' ' + i.room).toLowerCase().includes(q);
+    const matchSt  = !st  || i.status === st;
+    const matchPri = !pri || i.priority === pri;
+    const matchCat = !cat || i.cat === cat;
+    return matchQ && matchSt && matchPri && matchCat;
+  });
+  renderIssuesTable(filtered);
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterStatus').value = '';
+  document.getElementById('filterPriority').value = '';
+  document.getElementById('filterCategory').value = '';
+  applyFilters();
+}
+
+function resolveIssue(id) {
+  issues = loadIssues();
+  const idx = issues.findIndex(i => i.id === id);
+  if (idx >= 0 && issues[idx].status !== 'Resolved') {
+    issues[idx].status = 'Resolved';
+    saveIssues(issues);
+    applyFilters();
+    toast('Issue marked as resolved.', 'fas fa-check-circle');
+  }
+}
+
+function deleteIssue(id) {
+  if (!confirm('Delete this maintenance request? This cannot be undone.')) return;
+  issues = loadIssues();
+  issues = issues.filter(i => i.id !== id);
+  saveIssues(issues);
+  applyFilters();
+  toast('Issue deleted.', 'fas fa-trash-alt');
+}
+
+// ─── Analytics ───────────────────────────────────────────────
+function renderAnalytics() {
+  issues = loadIssues();
+
+  // By category
+  const cats = {};
+  issues.forEach(i => { cats[i.cat] = (cats[i.cat] || 0) + 1; });
+  const catMax = Math.max(...Object.values(cats), 1);
+  document.getElementById('catChart').innerHTML = Object.entries(cats)
+    .sort((a,b) => b[1]-a[1])
+    .map(([c,v]) => barRow(CAT_NAMES[c] || c, v, catMax, '')).join('');
+
+  // By priority
+  const pris = { Critical:0, High:0, Medium:0, Low:0 };
+  issues.forEach(i => { if (pris[i.priority] !== undefined) pris[i.priority]++; });
+  const priMax = Math.max(...Object.values(pris), 1);
+  const priCls = { Critical:'red', High:'', Medium:'amber', Low:'green' };
+  document.getElementById('priChart').innerHTML = Object.entries(pris)
+    .map(([p,v]) => barRow(p, v, priMax, priCls[p])).join('');
+
+  // Status donut legend
+  const statCounts = { Pending:0, 'In Progress':0, Resolved:0 };
+  issues.forEach(i => { if (statCounts[i.status] !== undefined) statCounts[i.status]++; });
+  const total = issues.length || 1;
+  const statColors = { Pending:'#C48B1A', 'In Progress':'#E8722A', Resolved:'#2E6B45' };
+  document.getElementById('statusChart').innerHTML = Object.entries(statCounts)
+    .map(([s,v]) => `
+      <div class="legend-row">
+        <div class="legend-dot" style="background:${statColors[s]}"></div>
+        <span>${s}</span>
+        <span class="legend-pct">${Math.round((v/total)*100)}% (${v})</span>
+      </div>
+    `).join('');
+
+  // Daily submissions (last 7 days)
+  const days = {};
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    days[d.toISOString().slice(0,10)] = 0;
+  }
+  issues.forEach(i => {
+    const d = i.date.slice(0,10);
+    if (days[d] !== undefined) days[d]++;
+  });
+  const dayMax = Math.max(...Object.values(days), 1);
+  document.getElementById('dailyChart').innerHTML = Object.entries(days)
+    .map(([d,v]) => barRow(d.slice(5), v, dayMax, '')).join('');
+}
+
+// ─── Form ─────────────────────────────────────────────────────
+function openForm() {
+  document.getElementById('formOverlay').classList.add('open');
+  document.getElementById('formPanel').classList.add('open');
+}
+function closeForm() {
+  document.getElementById('formOverlay').classList.remove('open');
+  document.getElementById('formPanel').classList.remove('open');
+}
+
+function submitForm() {
+  const vals = {
+    name:     document.getElementById('fp-name').value.trim(),
+    empId:    document.getElementById('fp-empid').value.trim(),
+    email:    document.getElementById('fp-email').value.trim(),
+    mobile:   document.getElementById('fp-mobile').value.trim(),
+    dept:     document.getElementById('fp-dept').value,
+    room:     document.getElementById('fp-room').value.trim(),
+    cat:      document.getElementById('fp-cat').value,
+    priority: document.getElementById('fp-priority').value,
+    title:    document.getElementById('fp-title').value.trim(),
+    desc:     document.getElementById('fp-desc').value.trim(),
+  };
+
+  let errors = [];
+  if (!vals.name)                     errors.push('fp-name');
+  if (!vals.empId)                    errors.push('fp-empid');
+  if (!EMAIL_RE.test(vals.email))     errors.push('fp-email');
+  if (!MOBILE_RE.test(vals.mobile))   errors.push('fp-mobile');
+  if (!vals.dept)                     errors.push('fp-dept');
+  if (!vals.cat)                      errors.push('fp-cat');
+  if (!vals.priority)                 errors.push('fp-priority');
+  if (!vals.title)                    errors.push('fp-title');
+  if (vals.desc.length < 20)          errors.push('fp-desc');
+
+  document.querySelectorAll('.fp-field').forEach(f => f.classList.remove('error'));
+  if (errors.length) {
+    errors.forEach(id => document.getElementById(id).classList.add('error'));
+    toast('Please fix the highlighted fields.', 'fas fa-exclamation-circle');
+    return;
+  }
+
+  issues = loadIssues();
+  const year = new Date().getFullYear();
+  const num  = String(issues.length + 42).padStart(4, '0');
+  const newIssue = {
+    id: `FX-${year}-${num}`,
+    name: vals.name,
+    empId: vals.empId,
+    email: vals.email,
+    mobile: vals.mobile,
+    dept: vals.dept,
+    room: vals.room,
+    cat: vals.cat,
+    priority: vals.priority,
+    title: vals.title,
+    desc: vals.desc,
+    status: 'Pending',
+    date: new Date().toISOString(),
+  };
+
+  issues.unshift(newIssue);
+  saveIssues(issues);
+  closeForm();
+  document.getElementById('mainForm').reset();
+  document.querySelectorAll('.fp-field').forEach(f => f.classList.remove('error'));
+  toast(`Request submitted — Ref: ${newIssue.id}`, 'fas fa-check-circle');
+
+  // Refresh current view
+  if (currentPage === 'dashboard') renderDashboard();
+  if (currentPage === 'issues')    { filtered = [...issues]; renderIssuesTable(filtered); }
+  if (currentPage === 'analytics') renderAnalytics();
+}
+
+// ─── Helpers ─────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short' }) + ' ' +
+         d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+}
+function chipHtml(priority) {
+  const cls = { Critical:'chip-critical', High:'chip-high', Medium:'chip-medium', Low:'chip-low' };
+  return `<span class="chip ${cls[priority] || 'chip-low'}">${priority}</span>`;
+}
+function statusHtml(status) {
+  const cls = { Pending:'status-pending', 'In Progress':'status-progress', Resolved:'status-resolved' };
+  return `<span class="status ${cls[status] || 'status-pending'}">${status}</span>`;
+}
+function toast(msg, icon = 'fas fa-info-circle') {
+  const area = document.getElementById('toastArea');
+  const el   = document.createElement('div');
+  el.className = 'toast-msg';
+  el.innerHTML = `<i class="${icon}"></i> ${msg}`;
+  area.appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+
+// ─── Init ─────────────────────────────────────────────────────
+renderDashboard();
+</script>
+</body>
+</html>

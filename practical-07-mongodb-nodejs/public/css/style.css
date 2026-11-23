@@ -1,0 +1,158 @@
+/**
+ * FixIt — Practical 07: Web Application Stylesheet
+ * University Facilities & Industrial Editorial Palette
+ */
+
+:root {
+    --primary-dark: #202522;
+    --primary-accent: #E8752A;
+    --primary-accent-hover: #D0631B;
+    --surface-bg: #F7F5EF;
+    --surface-card: #FFFFFF;
+    --border-color: #E2DFD7;
+    --text-primary: #1C201E;
+    --text-muted: #6B7280;
+    --status-pending: #D97706;
+    --status-progress: #2563EB;
+    --status-resolved: #059669;
+}
+
+body {
+    background-color: var(--surface-bg);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.fixit-navbar {
+    background-color: var(--primary-dark);
+    border-bottom: 3px solid var(--primary-accent);
+}
+
+.fixit-brand {
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: -0.5px;
+    color: #FFFFFF !important;
+}
+
+.fixit-brand span {
+    color: var(--primary-accent);
+}
+
+.badge-db {
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.card-fixit {
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-fixit:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.stat-card {
+    border-left: 4px solid var(--primary-accent);
+}
+
+.stat-card.pending {
+    border-left-color: var(--status-pending);
+}
+
+.stat-card.progress-stat {
+    border-left-color: var(--status-progress);
+}
+
+.stat-card.resolved {
+    border-left-color: var(--status-resolved);
+}
+
+.btn-primary-fixit {
+    background-color: var(--primary-accent);
+    border-color: var(--primary-accent);
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.btn-primary-fixit:hover {
+    background-color: var(--primary-accent-hover);
+    border-color: var(--primary-accent-hover);
+    color: #FFFFFF;
+}
+
+.badge-category {
+    background-color: #EEF2F6;
+    color: #1E293B;
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+}
+
+.badge-priority-Critical {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    font-weight: 700;
+}
+
+.badge-priority-High {
+    background-color: #FFEDD5;
+    color: #C2410C;
+    font-weight: 600;
+}
+
+.badge-priority-Medium {
+    background-color: #FEF3C7;
+    color: #92400E;
+    font-weight: 500;
+}
+
+.badge-priority-Low {
+    background-color: #F1F5F9;
+    color: #475569;
+    font-weight: 500;
+}
+
+.status-pill {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-pill.Pending {
+    background-color: #FEF3C7;
+    color: #B45309;
+}
+
+.status-pill.In-Progress {
+    background-color: #DBEAFE;
+    color: #1D4ED8;
+}
+
+.status-pill.Resolved {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.table-tickets td, .table-tickets th {
+    vertical-align: middle;
+}
+
+.footer-fixit {
+    background-color: var(--primary-dark);
+    color: #9CA3AF;
+    margin-top: auto;
+}

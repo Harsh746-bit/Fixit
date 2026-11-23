@@ -1,0 +1,17 @@
+{
+  "name": "fixit-practical-04-node",
+  "version": "1.0.0",
+  "description": "FixIt Campus Maintenance System - Native Node.js Server (Practical 04)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "nodejs",
+    "http",
+    "native-server",
+    "practical-04"
+  ],
+  "author": "Web Technology Lab",
+  "license": "ISC"
+}

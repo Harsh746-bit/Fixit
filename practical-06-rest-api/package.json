@@ -1,0 +1,29 @@
+{
+  "name": "fixit-practical-06-rest-api",
+  "version": "1.0.0",
+  "description": "FixIt Campus Maintenance System - Database RESTful API with CRUD and Cloud Deployment (Practical 06)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node seed.js",
+    "test:endpoints": "node test-endpoints.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.4"
+  },
+  "keywords": [
+    "rest-api",
+    "crud",
+    "database",
+    "postman",
+    "deployment",
+    "render",
+    "practical-06"
+  ],
+  "author": "Web Technology Lab",
+  "license": "ISC"
+}

@@ -1,0 +1,141 @@
+/* ==========================================================================
+   FixIt — ReactJS Edition (Practical 03)
+   Design Philosophy: Modern University Facilities + Industrial Editorial
+   ========================================================================== */
+
+:root {
+  --color-charcoal: #202522;
+  --color-warm-white: #F7F5EF;
+  --color-white: #FFFFFF;
+  --color-safety-orange: #E8752A;
+  --color-dark-orange: #C95D1F;
+  --color-slate: #5E6663;
+  --color-light-gray: #E7E5DF;
+  --color-green: #3F7D58;
+  --color-amber: #D99A2B;
+  --color-red: #B94A48;
+
+  --color-green-subtle: #EAF4EE;
+  --color-amber-subtle: #FDF6E7;
+  --color-danger-subtle: #FBEBEB;
+
+  --font-primary: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-warm-white);
+  color: var(--color-charcoal);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bg-charcoal { background-color: var(--color-charcoal) !important; }
+.bg-warm-white { background-color: var(--color-warm-white) !important; }
+.bg-safety-orange { background-color: var(--color-safety-orange) !important; }
+.bg-green-subtle { background-color: var(--color-green-subtle) !important; }
+.bg-amber-subtle { background-color: var(--color-amber-subtle) !important; }
+.bg-danger-subtle { background-color: var(--color-danger-subtle) !important; }
+
+.text-charcoal { color: var(--color-charcoal) !important; }
+.text-slate { color: var(--color-slate) !important; }
+.text-safety-orange { color: var(--color-safety-orange) !important; }
+.text-green { color: var(--color-green) !important; }
+.text-amber { color: var(--color-amber) !important; }
+.text-red { color: var(--color-red) !important; }
+
+.border-light-gray { border-color: var(--color-light-gray) !important; }
+.border-green { border-color: rgba(63, 125, 88, 0.4) !important; }
+.border-amber { border-color: rgba(217, 154, 43, 0.4) !important; }
+
+.font-monospace { font-family: var(--font-mono) !important; }
+.shadow-xs { box-shadow: 0 1px 3px rgba(32, 37, 34, 0.05); }
+
+.btn-safety-orange {
+  background-color: var(--color-safety-orange);
+  border-color: var(--color-safety-orange);
+  color: #FFFFFF;
+  transition: all 0.2s ease;
+}
+
+.btn-safety-orange:hover,
+.btn-safety-orange:focus {
+  background-color: var(--color-dark-orange);
+  border-color: var(--color-dark-orange);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.btn-outline-charcoal {
+  color: var(--color-charcoal);
+  border: 1.5px solid var(--color-charcoal);
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-charcoal:hover {
+  background-color: var(--color-charcoal);
+  color: #FFFFFF;
+}
+
+.brand-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.category-card {
+  border-color: var(--color-light-gray) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(32, 37, 34, 0.08);
+  border-color: var(--color-safety-orange) !important;
+}
+
+.category-icon-box {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.issue-card {
+  border: 1px solid var(--color-light-gray);
+  background-color: #FFFFFF;
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.issue-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(32, 37, 34, 0.06);
+}
+
+.form-control, .form-select {
+  border-color: var(--color-light-gray);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+  color: var(--color-charcoal);
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--color-safety-orange);
+  box-shadow: 0 0 0 0.2rem rgba(232, 117, 42, 0.15);
+}
+
+.badge-priority-Critical { background-color: var(--color-red) !important; color: #FFFFFF; }
+.badge-priority-High { background-color: #FA8C16 !important; color: #FFFFFF; }
+.badge-priority-Medium { background-color: var(--color-amber) !important; color: #202522; }
+.badge-priority-Low { background-color: #8C9BA5 !important; color: #FFFFFF; }
+
+.badge-status-Pending { background-color: var(--color-amber-subtle); color: var(--color-amber); border: 1px solid rgba(217,154,43,0.4); }
+.badge-status-InProgress { background-color: #FFF3EB; color: var(--color-safety-orange); border: 1px solid rgba(232,117,42,0.4); }
+.badge-status-Resolved { background-color: var(--color-green-subtle); color: var(--color-green); border: 1px solid rgba(63,125,88,0.4); }

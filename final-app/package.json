@@ -1,0 +1,25 @@
+{
+  "name": "fixit-final-integrated-app",
+  "version": "1.0.0",
+  "description": "FixIt — Smart Campus Maintenance Management System (Integrated Final Full-Stack)",
+  "private": true,
+  "scripts": {
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "build": "npm run install:all && cd frontend && npm run build",
+    "start": "node backend/server.js",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev"
+  },
+  "keywords": [
+    "campus-maintenance",
+    "react",
+    "bootstrap",
+    "express",
+    "nodejs",
+    "rest-api"
+  ],
+  "author": "Web Technology Lab",
+  "license": "ISC"
+}
