@@ -4,6 +4,16 @@ This repository is pre-configured for a **single-service full-stack deployment**
 
 ---
 
+## 🌐 Active Live Deployment
+
+- **Production Application URL:** [https://fixit-sp6y.onrender.com/](https://fixit-sp6y.onrender.com/)
+- **RESTful API Endpoint:** [https://fixit-sp6y.onrender.com/api/issues](https://fixit-sp6y.onrender.com/api/issues)
+- **Role Permissions & Auth Endpoint:** [https://fixit-sp6y.onrender.com/api/auth/roles](https://fixit-sp6y.onrender.com/api/auth/roles)
+- **Hosting Platform:** Render (Free Web Service Tier)
+- **Repository:** [https://github.com/Harsh746-bit/Fixit](https://github.com/Harsh746-bit/Fixit)
+
+---
+
 ## 🚀 Quick Deploy Steps (Under 3 Minutes)
 
 ### Step 1: Push Code to GitHub

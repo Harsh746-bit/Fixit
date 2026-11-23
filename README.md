@@ -1,6 +1,13 @@
 # FixIt — Smart Campus Maintenance Management System
 
-> A complete, production-quality, academic web application engineered to satisfy **all five Web Technology Practicals** as one continuously evolving real-world university facilities platform.
+> A complete, production-quality, academic web application engineered to satisfy **all Web Technology Practicals** as one continuously evolving real-world university facilities platform.
+
+[![Live Deployment](https://img.shields.io/badge/Render-Live%20Demo-brightgreen?style=for-the-badge&logo=render)](https://fixit-sp6y.onrender.com/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/Harsh746-bit/Fixit)
+
+- 🌐 **Live Deployed Application (Render):** [https://fixit-sp6y.onrender.com/](https://fixit-sp6y.onrender.com/)
+- 📡 **Live Public REST API Endpoint:** [https://fixit-sp6y.onrender.com/api/issues](https://fixit-sp6y.onrender.com/api/issues)
+- 🛡️ **Role-Based Access Control (RBAC):** [https://fixit-sp6y.onrender.com/api/auth/roles](https://fixit-sp6y.onrender.com/api/auth/roles)
 
 ---
 
@@ -48,7 +55,7 @@ FINAL FULL-STACK: React Frontend + Bootstrap 5 + Express REST API + Node.js + JS
 | **Practical 05** | ExpressJS | Express app, modular `express.Router()`, custom validation middleware, `express.json()`, controller functions, route parameters (`:id`), status codes, centralized error handler. | [`practical-05-express/`](file:///c:/College/3rd%20Year/Web%20technology/Fixit/practical-05-express) |
 | **Practical 06** | RESTful API & Database | Database-backed RESTful API, full CRUD (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`), validation, Render cloud deployment, Postman collection & automated assertions. | [`practical-06-rest-api/`](file:///c:/College/3rd%20Year/Web%20technology/Fixit/practical-06-rest-api) |
 | **Practical 07** | Node.js + Express + MongoDB | MongoDB NoSQL database (`fixit_campus_db`), collection (`maintenance_issues`), Mongoose ODM, CRUD operations, input validation, interactive Web Browser dashboard & Postman tests. | [`practical-07-mongodb-nodejs/`](file:///c:/College/3rd%20Year/Web%20technology/Fixit/practical-07-mongodb-nodejs) |
-| **Final App** | Full-Stack Integrated | React + Bootstrap frontend connected via `fetch()` to Express backend. Real-time ticket submission, filtering, status transitions, modal deletion, and stats synchronization. | [`final-app/`](file:///c:/College/3rd%20Year/Web%20technology/Fixit/final-app) |
+| **Final App** | Full-Stack Integrated + RBAC | React + Bootstrap frontend connected via `/api` to Express backend with Role-Based Access Control (Student, Staff, Admin). Deployed live on Render. | [🚀 Live App](https://fixit-sp6y.onrender.com/) · [`final-app/`](file:///c:/College/3rd%20Year/Web%20technology/Fixit/final-app) |
 
 ---
 
